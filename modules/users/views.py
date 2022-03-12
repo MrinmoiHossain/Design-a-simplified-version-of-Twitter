@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, session, url_for, Blueprin
 from sqlalchemy.exc import IntegrityError
 
 from modules import db, bcrypt
-from modules.models import User, Follower
+from modules.models import User, Follower, Tweet
 
 from .forms import RegisterForm, LoginForm
 

@@ -34,12 +34,12 @@ def filtered_tweets(user_id):
 @tweets_routes.route('/tweets/')
 @login_required
 def tweet():
-    return render_template('tweets.html', form = PostTweetForm(), all_tweets = filtered_tweets(session['user_id']),)
+    return render_template('tweets.html', form = PostTweetForm(), allTweets = filtered_tweets(session['user_id']),)
 
 
 @tweets_routes.route('/tweets/post/', methods=['GET', 'POST'])
 @login_required
-def post_tweet():
+def postTweet():
     error = None
     form = PostTweetForm()
     if request.method == 'POST':
@@ -49,12 +49,12 @@ def post_tweet():
             db.session.commit()
 
             return redirect(url_for('tweets.tweet'))
-    return render_template('tweets.html', form = form, error = error, all_tweets = filtered_tweets(session['user_id']),)
+    return render_template('tweets.html', form = form, error = error, allTweets = filtered_tweets(session['user_id']),)
 
 
 @tweets_routes.route('/tweets/delete/<int:tweetId>/')
 @login_required
-def delete_tweet(tweetId):
+def deleteTweet(tweetId):
     our_tweetId = tweetId
     tweet = db.session.query(Tweet).filter_by(tweetId = our_tweetId)
 
