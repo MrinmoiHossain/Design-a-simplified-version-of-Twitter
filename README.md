@@ -1,1 +1,1 @@
-# Design-a-simplified-version-of-Twitter
+# Design a Simplified Version of Twitter
