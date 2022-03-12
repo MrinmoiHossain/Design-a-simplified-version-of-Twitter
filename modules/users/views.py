@@ -2,8 +2,8 @@ from functools import wraps
 from flask import redirect, render_template, request, session, url_for, Blueprint
 from sqlalchemy.exc import IntegrityError
 
-from modules.models import User
 from modules import db, bcrypt
+from modules.models import User, Follower
 
 from .forms import RegisterForm, LoginForm
 
@@ -78,3 +78,44 @@ def all_users():
     users = db.session.query(User).all()
 
     return render_template('users.html', users = users)
+
+@users_routes.route('/users/follow/<int:user_id>/')
+@login_required
+def followUser(user_id):
+    whom_id = user_id
+    try:
+        whom = db.session.query(User).filter_by(id = whom_id).first().userName
+
+        if session['user_id'] != whom_id:
+            new_follow = Follower(session['user_id'], whom_id)
+            try:
+                db.session.add(new_follow)
+                db.session.commit()
+                return redirect(url_for('users.all_users'))
+            except IntegrityError:
+                return "## TODO ERROR ##"
+        else:
+            return redirect(url_for('users.all_users'))
+    except AttributeError:
+        return "## TODO ERROR ##"
+
+@users_routes.route('/users/unfollow/<int:user_id>/')
+@login_required
+def unfollowUser(user_id):
+    whom_id = user_id
+    try:
+        whom = db.session.query(User).filter_by(id = whom_id).first().userName
+
+        if session['user_id'] != whom_id:
+            following = db.session.query(Follower).filter_by(who_id = session['user_id'], whom_id = whom_id)
+
+            if following.all():
+                following.delete()
+                db.session.commit()
+                return redirect(url_for('users.all_users'))
+            else:
+                return "## TODO ERROR ##"
+        else:
+            return redirect(url_for('users.all_users'))
+    except AttributeError:
+        return "## TODO ERROR ##"
