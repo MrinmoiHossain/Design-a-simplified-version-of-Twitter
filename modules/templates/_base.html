@@ -16,7 +16,7 @@
                         {% if session.loggedIn %}
                             <li><a href="/">Home</a></li>
                             <li><a href="">Tweets</a></li>
-                            <li><a href="{{ url_for('users.all_users') }}">{{ session.name }}</a></li>
+                            <li><a href="{{ url_for('users.profile', username=session.name) }}">{{ session.name }}</a></li>
                         {% endif %}
                         {% if not session.loggedIn %}
                             {% block signInForm %}
