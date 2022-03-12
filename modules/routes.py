@@ -13,5 +13,7 @@ def healthcheck():
 
 
 from modules.users.views import users_routes
+from modules.tweets.views import tweets_routes
 
 app.register_blueprint(users_routes)
+app.register_blueprint(tweets_routes)
