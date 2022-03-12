@@ -16,25 +16,25 @@ class User(db.Model):
         self.password = password
 
     @classmethod
-    def is_following(cls, who_id, whom_id):
-        whom_ids = db.session.query(Follower.whom_id).filter_by(who_id = who_id).all()
-        whom_ids = [i[0] for i in whom_ids]
+    def isFollow(cls, whoId, whomId):
+        whomIds = db.session.query(Follower.whomId).filter_by(whoId = whoId).all()
+        whomIds = [i[0] for i in whomIds]
         
-        if whom_id in whom_ids:
+        if whomId in whomIds:
             return True
         else:
             return False
 
 class Follower(db.Model):
     __tablename__ = 'follower'
-    __table_args__ = (db.PrimaryKeyConstraint('who_id', 'whom_id'),)
+    __table_args__ = (db.PrimaryKeyConstraint('whoId', 'whomId'),)
 
-    who_id = db.Column(db.Integer)
-    whom_id = db.Column(db.Integer)
+    whoId = db.Column(db.Integer)
+    whomId = db.Column(db.Integer)
 
-    def __init__(self, who_id, whom_id):
-        self.who_id = who_id
-        self.whom_id = whom_id
+    def __init__(self, whoId, whomId):
+        self.whoId = whoId
+        self.whomId = whomId
 
 class Tweet(db.Model):
     __tablename__ = 'tweets'

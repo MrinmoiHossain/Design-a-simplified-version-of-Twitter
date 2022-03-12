@@ -13,7 +13,7 @@
                     {% if user.userName != session.name %}
                         <h4 class="media-heading">{{ user.userName }}
                         
-                        {% if user.is_following(session.user_id, user.id) %}
+                        {% if user.isFollow(session.user_id, user.id) %}
                             <a class="btn btn-info btn-xs" href="{{ url_for('users.unfollowUser', user_id=user.id )}}">Unfollow</a></h4>
                         {% else %}
                             <a class="btn btn-info btn-xs" href="{{ url_for('users.followUser', user_id=user.id )}}">Follow</a></h4>

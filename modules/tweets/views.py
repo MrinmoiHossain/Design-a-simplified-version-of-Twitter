@@ -20,17 +20,16 @@ def login_required(test):
     return wrap
 
 def filtered_tweets(user_id):
-    who_id = user_id
-    whom_ids = db.session.query(Follower.whom_id).filter_by(who_id = who_id)
-    user_tweets = db.session.query(Tweet).filter_by(userId = who_id)
+    whoId = user_id
+    whomIds = db.session.query(Follower.whomId).filter_by(whoId = whoId)
+    userTweets = db.session.query(Tweet).filter_by(userId = whoId)
 
-    if whom_ids.all():
-        follower_tweets = db.session.query(Tweet).filter(Tweet.userId.in_(whom_ids))
-        result = user_tweets.union(follower_tweets)
+    if whomIds.all():
+        follower_tweets = db.session.query(Tweet).filter(Tweet.userId.in_(whomIds))
+        result = userTweets.union(follower_tweets)
         return result.order_by(Tweet.tweetTime.desc())
     else:
-        return user_tweets.order_by(Tweet.tweetTime.desc())
-
+        return userTweets.order_by(Tweet.tweetTime.desc())
 
 @tweets_routes.route('/tweets/')
 @login_required
