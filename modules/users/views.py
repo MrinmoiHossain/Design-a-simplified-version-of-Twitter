@@ -23,7 +23,7 @@ def login():
                 session['user_id'] = user.id
                 session['name'] = user.userName
 
-                return "## TODO: Welcome Login ##"
+                return redirect(url_for('tweets.tweet'))
             else:
                 error = 'Invalid Username or Password'
 
@@ -36,7 +36,7 @@ def register():
     form = RegisterForm(request.form)
 
     if 'loggedIn' in session:
-        return "## TODO ##"
+        return redirect(url_for('tweets.tweet'))
 
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -90,12 +90,12 @@ def profile(username):
 @users_routes.route('/users/follow/<int:user_id>/')
 @login_required
 def followUser(user_id):
-    whom_id = user_id
+    whomId = user_id
     try:
-        whom = db.session.query(User).filter_by(id = whom_id).first().userName
+        whom = db.session.query(User).filter_by(id = whomId).first().userName
 
-        if session['user_id'] != whom_id:
-            new_follow = Follower(session['user_id'], whom_id)
+        if session['user_id'] != whomId:
+            new_follow = Follower(session['user_id'], whomId)
             try:
                 db.session.add(new_follow)
                 db.session.commit()
@@ -110,12 +110,12 @@ def followUser(user_id):
 @users_routes.route('/users/unfollow/<int:user_id>/')
 @login_required
 def unfollowUser(user_id):
-    whom_id = user_id
+    whomId = user_id
     try:
-        whom = db.session.query(User).filter_by(id = whom_id).first().userName
+        whom = db.session.query(User).filter_by(id = whomId).first().userName
 
-        if session['user_id'] != whom_id:
-            following = db.session.query(Follower).filter_by(who_id = session['user_id'], whom_id = whom_id)
+        if session['user_id'] != whomId:
+            following = db.session.query(Follower).filter_by(whoId = session['user_id'], whomId = whomId)
 
             if following.all():
                 following.delete()
