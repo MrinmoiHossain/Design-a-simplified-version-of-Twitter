@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="author" content="Mokit Hossain">
+        <title>Twitter</title>
+
+        <link href="{{ url_for('static', filename='css/bootstrap.min.css' )}}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/main.css' )}}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="header clearfix">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        {% if session.loggedIn %}
+                            <li><a href="/">Home</a></li>
+                            <li><a href="">Tweets</a></li>
+                            <li><a href="">Profile</a></li>
+                        {% endif %}
+                        {% if not session.loggedIn %}
+                            {% block signInForm %}
+                            {% endblock signInForm %}
+                        {% else %}
+                            <li role="presentation">
+                                <a href="{{ url_for('users.logout') }}">Logout</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% if error %}
+                <div class="error">
+                    <strong>Error:</strong>{{ error }}
+                </div>
+            {% endif %}
+
+            {% block content %}
+            {% endblock content %}
+        </div>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.css' )}}"></script>
+    </body>
+</html>
