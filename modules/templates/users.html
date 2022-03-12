@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+
+{% block content %}
+    <div class="row marketing">
+        {% for user in users %}
+            <div class="media">
+                <div class="media-left">
+                    <a href="#">
+                        <img src="" alt=""/>
+                    </a>
+                </div>
+                <div class="media-body">
+                    {% if user.userName != session.name %}
+                        <h4 class="media-heading">{{ user.userName }}
+                        
+                        {% if user.is_following(session.user_id, user.id) %}
+                            <a class="btn btn-info btn-xs" href="{{ url_for('users.unfollowUser', user_id=user.id )}}">Unfollow</a></h4>
+                        {% else %}
+                            <a class="btn btn-info btn-xs" href="{{ url_for('users.followUser', user_id=user.id )}}">Follow</a></h4>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
