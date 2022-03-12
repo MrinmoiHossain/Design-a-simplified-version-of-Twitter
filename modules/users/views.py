@@ -79,6 +79,14 @@ def all_users():
 
     return render_template('users.html', users = users)
 
+@users_routes.route("/<username>")
+@login_required
+def profile(username):
+    users = db.session.query(User).all()
+
+    return render_template('users.html', users = users)
+
+
 @users_routes.route('/users/follow/<int:user_id>/')
 @login_required
 def followUser(user_id):
@@ -91,11 +99,11 @@ def followUser(user_id):
             try:
                 db.session.add(new_follow)
                 db.session.commit()
-                return redirect(url_for('users.all_users'))
+                return redirect(url_for("users.profile", username = session['name']))
             except IntegrityError:
                 return "## TODO ERROR ##"
         else:
-            return redirect(url_for('users.all_users'))
+            return redirect(url_for("users.profile", username = session['name']))
     except AttributeError:
         return "## TODO ERROR ##"
 
@@ -112,10 +120,10 @@ def unfollowUser(user_id):
             if following.all():
                 following.delete()
                 db.session.commit()
-                return redirect(url_for('users.all_users'))
+                return redirect(url_for("users.profile", username = session['name']))
             else:
                 return "## TODO ERROR ##"
         else:
-            return redirect(url_for('users.all_users'))
+            return redirect(url_for("users.profile", username = session['name']))
     except AttributeError:
         return "## TODO ERROR ##"
