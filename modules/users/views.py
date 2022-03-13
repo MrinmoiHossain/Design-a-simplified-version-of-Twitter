@@ -31,6 +31,10 @@ def filteredTweets(user_id):
     else:
         return userTweets.order_by(Tweet.tweetTime.desc())
 
+@users_routes.route('/home/', methods = ['GET', 'POST'])
+@login_required
+def homePage():
+    return render_template('home.html', form = PostTweetForm(), allTweets = filteredTweets(session['user_id']))
 
 @users_routes.route('/', methods = ['GET', 'POST'])
 def login():
@@ -46,7 +50,7 @@ def login():
                 session['user_id'] = user.id
                 session['name'] = user.userName
 
-                return redirect(url_for('tweets.tweet'))
+                return redirect(url_for('users.homePage'))
             else:
                 error = 'Invalid Username or Password'
 
@@ -59,11 +63,11 @@ def register():
     form = RegisterForm(request.form)
 
     if 'loggedIn' in session:
-        return redirect(url_for('tweets.tweet'))
+        return redirect(url_for("users.homePage"))
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            newUser = User(form.name.data, form.email.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),)
+            newUser = User(form.name.data, form.email.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'))
             try:
                 db.session.add(newUser)
                 db.session.commit()
@@ -75,11 +79,6 @@ def register():
                 return render_template('register.html', form = form, error = error)
 
     return render_template('register.html', form = form, error = error)
-
-@users_routes.route('/home', methods = ['GET', 'POST'])
-@login_required
-def homePage():
-    return render_template('tweets.html', form = PostTweetForm(), allTweets = filteredTweets(session['user_id']),)
 
 @users_routes.route('/users/')
 @login_required
@@ -97,7 +96,7 @@ def profile(username):
     return render_template('profile.html', form = PostTweetForm(), error = error,  allTweets = filteredTweets(session['user_id']), users = users)
 
 
-@users_routes.route('/<username>/tweets')
+@users_routes.route('/<username>/tweets', methods = ['GET', 'POST'])
 @login_required
 def postTweet(username):
     error = None
@@ -109,8 +108,8 @@ def postTweet(username):
             db.session.add(new_tweet)
             db.session.commit()
 
-            return redirect(url_for("users.profile", username = session['name']))
-    return redirect(url_for("users.profile", username = session['name']))
+            return redirect(request.url)
+    return redirect(url_for("users.homePage"))
 
 @users_routes.route('/<username>/tweets/delete/<int:tweetId>/')
 @login_required
