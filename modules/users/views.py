@@ -40,7 +40,7 @@ def register():
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            newUser = User(form.name.data, form.email.data, bcrypt.generate_password_hash(form.password.data),)
+            newUser = User(form.name.data, form.email.data, bcrypt.generate_password_hash(form.password.data).decode('utf-8'),)
             try:
                 db.session.add(newUser)
                 db.session.commit()

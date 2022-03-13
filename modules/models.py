@@ -7,7 +7,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     userName = db.Column(db.String(20), nullable = False, unique = True)
     email = db.Column(db.String(100), nullable = False, unique = True)
-    password = db.Column(db.String(32), nullable = False)
+    password = db.Column(db.String(100), nullable = False)
     tweets = db.relationship('Tweet', backref = 'poster')
 
     def __init__(self, userName = None, email = email, password = None):
