@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+    web:
+        build: .
+        container_name: twitter_clone
+        environment:
+            HOST: ${HOST}
+            PORT: ${PORT}
+            SECRET_KEY: ${SECRET_KEY}
+            DATABASE_URI: ${DATABASE_URI}
+        ports:
+        -   "50000:50000"
