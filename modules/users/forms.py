@@ -11,3 +11,6 @@ class RegisterForm(FlaskForm):
     email = StringField('Email', validators = [DataRequired()])
     password = PasswordField('Password', validators = [DataRequired(), Length(min = 6, max = 32)])
     confirmPassword = PasswordField('Repeat Password', validators = [DataRequired(), EqualTo('password')])
+
+class PostTweetForm(FlaskForm):
+    tweet = StringField('Tweet', validators=[DataRequired(), Length(min = 6, max = 120)])
