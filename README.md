@@ -37,7 +37,11 @@ docker-compose down
 ```
 
 ### Application Endpoints
-- ```http://localhost:50000/``` - 
+- ```http://localhost:50000/health``` - Application Heathcheck
+- ```http://localhost:50000``` or ```http://localhost:50000/login``` - Application Login
+- ```http://localhost:50000/home``` - Application Homepage
+- ```http://localhost:50000/<username>``` - User profie
+- ```http://localhost:50000/logout``` - Application Logout
 
 
 ### Application Demo
@@ -46,4 +50,5 @@ docker-compose down
 - 
 
 ### Future Improvements
-- 
+- Application test case
+- Application login
