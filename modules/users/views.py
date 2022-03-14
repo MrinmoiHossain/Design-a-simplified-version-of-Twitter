@@ -1,13 +1,15 @@
 import datetime
 from functools import wraps
-from flask import redirect, render_template, request, session, url_for, Blueprint
+from flask import Blueprint, redirect, render_template, request, session, url_for
 from sqlalchemy.exc import IntegrityError
 
+# Database related modules import
 from modules import db, bcrypt
 from modules.models import User, Follower, Tweet
 
 from .forms import RegisterForm, LoginForm, PostTweetForm
 
+# Main blueprint, name as users
 users_routes = Blueprint('users', __name__)
 
 def login_required(test):
@@ -20,6 +22,12 @@ def login_required(test):
     return wrap
 
 def filteredTweets(user_id):
+    """
+        Filter the tweets from the database using user id number.
+        Input: user_id
+        Oupute: List of tweets descending order 
+    """
+
     whoId = user_id
     whomIds = db.session.query(Follower.whomId).filter_by(whoId = whoId)
     userTweets = db.session.query(Tweet).filter_by(userId = whoId)
@@ -31,13 +39,26 @@ def filteredTweets(user_id):
     else:
         return userTweets.order_by(Tweet.tweetTime.desc())
 
+
 @users_routes.route('/home/', methods = ['GET', 'POST'])
 @login_required
 def homePage():
+    """
+        User homepage routing path.
+        Accept Method: GET, POST
+    """
+
     return render_template('home.html', form = PostTweetForm(), allTweets = filteredTweets(session['user_id']))
 
+
 @users_routes.route('/', methods = ['GET', 'POST'])
+@users_routes.route('/login', methods = ['GET', 'POST'])
 def login():
+    """
+        User login page
+        Accept Method: GET, POST
+    """
+
     error = None
     form = LoginForm(request.form)
 
@@ -59,6 +80,11 @@ def login():
 
 @users_routes.route('/register/', methods = ['GET', 'POST'])
 def register():
+    """
+        User registration page
+        Accept Method: GET, POST
+    """
+
     error = None
     form = RegisterForm(request.form)
 
@@ -80,16 +106,28 @@ def register():
 
     return render_template('register.html', form = form, error = error)
 
-@users_routes.route('/users/')
+
+@users_routes.route('/users/', methods = ['GET'])
 @login_required
 def all_users():
+    """
+        User data page
+        Accept Method: GET, POST
+    """
+
     users = db.session.query(User).all()
 
     return render_template('users.html', users = users)
 
-@users_routes.route("/<username>")
+
+@users_routes.route("/<username>", methods = ['GET', 'POST'])
 @login_required
 def profile(username):
+    """
+        User profile
+        Accept Method: GET, POST
+    """
+
     error = None
     users = db.session.query(User).all()
 
@@ -99,6 +137,11 @@ def profile(username):
 @users_routes.route('/<username>/tweets', methods = ['GET', 'POST'])
 @login_required
 def postTweet(username):
+    """
+        User tweets page
+        Accept Method: GET, POST
+    """
+
     error = None
     form = PostTweetForm()
 
@@ -111,9 +154,15 @@ def postTweet(username):
             return redirect(request.url)
     return redirect(url_for("users.homePage"))
 
-@users_routes.route('/<username>/tweets/delete/<int:tweetId>/')
+
+@users_routes.route('/<username>/tweets/delete/<int:tweetId>/', methods = ['GET', 'POST'])
 @login_required
 def deleteTweet(username, tweetId):
+    """
+        Delete the tweets for a user
+        Accept Method: GET, POST
+    """
+
     our_tweetId = tweetId
     tweet = db.session.query(Tweet).filter_by(tweetId = our_tweetId)
 
@@ -128,9 +177,14 @@ def deleteTweet(username, tweetId):
         return redirect(url_for("users.profile", username = session['name']))
 
 
-@users_routes.route('/users/follow/<int:user_id>/')
+@users_routes.route('/users/follow/<int:user_id>/', methods = ['GET', 'POST'])
 @login_required
 def followUser(user_id):
+    """
+        Follow other users
+        Accept Method: GET, POST
+    """
+
     whomId = user_id
     try:
         whom = db.session.query(User).filter_by(id = whomId).first().userName
@@ -148,9 +202,15 @@ def followUser(user_id):
     except AttributeError:
         return "## TODO ERROR ##"
 
-@users_routes.route('/users/unfollow/<int:user_id>/')
+
+@users_routes.route('/users/unfollow/<int:user_id>/', methods = ['GET', 'POST'])
 @login_required
 def unfollowUser(user_id):
+    """
+        Unfollow other users
+        Accept Method: GET, POST
+    """
+
     whomId = user_id
     try:
         whom = db.session.query(User).filter_by(id = whomId).first().userName
@@ -169,9 +229,15 @@ def unfollowUser(user_id):
     except AttributeError:
         return "## TODO ERROR ##"
 
-@users_routes.route('/logout/')
+
+@users_routes.route('/logout/', methods = ['GET', 'POST'])
 @login_required
 def logout():
+    """
+        Routing to the application logout page
+        Input: None
+        Ouput: redirect to user login page
+    """
     session.pop('loggedIn', None)
     session.pop('user_id', None)
     session.pop('name', None)

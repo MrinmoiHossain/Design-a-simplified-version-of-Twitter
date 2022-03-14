@@ -2,6 +2,17 @@ from modules import db
 import datetime
 
 class User(db.Model):
+    """
+        Table:
+            name: users
+            columns:
+            - id [string]
+            - userName [string]
+            - email [string]
+            - password [string]
+            - tweets [Tweet table relationship]
+    """
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -26,6 +37,14 @@ class User(db.Model):
             return False
 
 class Follower(db.Model):
+    """
+        Table:
+            name: follower
+            columns:
+            - whoId [int]
+            - whomId [int]
+    """
+
     __tablename__ = 'follower'
     __table_args__ = (db.PrimaryKeyConstraint('whoId', 'whomId'),)
 
@@ -37,6 +56,16 @@ class Follower(db.Model):
         self.whomId = whomId
 
 class Tweet(db.Model):
+    """
+        Table:
+            name: tweets
+            columns:
+            - tweetId [int]
+            - userId [int]
+            - tweet [string]
+            - tweetTime [date time]
+    """
+
     __tablename__ = 'tweets'
 
     tweetId = db.Column(db.Integer, primary_key = True)
