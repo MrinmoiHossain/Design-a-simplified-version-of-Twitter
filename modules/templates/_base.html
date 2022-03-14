@@ -2,32 +2,43 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="Mokit Hossain">
         <title>Twitter</title>
 
+        <link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" >
+        <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css" >
         <link href="{{ url_for('static', filename='css/bootstrap.min.css' )}}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/util.css' )}}" rel="stylesheet">
         <link href="{{ url_for('static', filename='css/main.css' )}}" rel="stylesheet">
     </head>
     <body>
-        <div class="container">
-            <div class="header clearfix">
-                <nav>
-                    <ul class="nav nav-pills pull-right">
-                        {% if session.loggedIn %}
-                            <li><a href="/home/">Home</a></li>
-                            <li><a href="{{ url_for('users.profile', username=session.name) }}">{{ session.name }}</a></li>
-                        {% endif %}
-                        {% if not session.loggedIn %}
-                            {% block signInForm %}
-                            {% endblock signInForm %}
-                        {% else %}
-                            <li role="presentation">
-                                <a href="{{ url_for('users.logout') }}">Logout</a>
-                            </li>
-                        {% endif %}
-                    </ul>
+        <div>
+            {% if not session.loggedIn %}
+                {% block signInForm %}
+                {% endblock signInForm %}
+            {% else %}
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+                    <div class="container">
+                            <ul class="navbar-nav ms-auto">
+                                {% if session.loggedIn %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="/home/">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ url_for('users.profile', username=session.name) }}">{{ session.name }}</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
                 </nav>
-            </div>
+            {% endif %}
+            
+
             {% if error %}
                 <div class="error">
                     <strong>Error:</strong>{{ error }}
