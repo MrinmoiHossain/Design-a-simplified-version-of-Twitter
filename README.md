@@ -1,7 +1,7 @@
 # Design a Simplified Version of Twitter
 
 ## Overview
-ß
+
 ### Prerequisites
 We will be installing the tools that we'll need to use for getting our environment set up properly.
 1. [Install Docker](https://docs.docker.com/get-docker/)
@@ -45,10 +45,41 @@ docker-compose down
 
 
 ### Application Demo
+- Login Page
+![Login Page](demo/1-login.png)
+- Registration Page
+![Registration Page](demo/2-registration.png)
+- Login Page
+![Login Page](demo/3-login.png)
+- Home Page
+![Home Page](demo/4-home.png)
+- Home Page after Tweet
+![Home Page after Tweet](demo/5-home-after-tweet.png)
+- Profile Page after Tweet
+![Profile Page after Tweet](demo/6-profile-after-tweet.png)
+- Another User Profile Page
+![Another User Profile Page](demo/7-other-user-profile.png)
+- Another User Profile Page after Follow
+![Another User Profile Page after Follow](demo/8-other-user-profile-atfer-follow.png)
+- Another User Home Page after Follow
+![Another User Home Page after Follow](demo/9-other-user-home-after-follow.png)
+- Another User Profile Page after Tweet
+![Another User Profile Page after Follow](demo/10-other-user-profile-after-tweet.png)
+- Another User Home Page after Tweet
+![Another User Home Page after Follow](demo/11-other-user-home-after-tweet.png)
+
 
 ### Current Issues
-- 
+- UI error handeling issues
+- Tweet post timing (getting post current timestamp using server time, not local user time)
 
 ### Future Improvements
-- Application test case
-- Application login
+- Application full test coverage
+- Application log formate
+- Tweet timestamp using client local time
+- Follow/Unfollow counting for a user
+- Tweet edit option enable for a user
+- Tweet post using pagination
+
+### Credits
+-  For Frontend UI (Login/Registration Page): [Login Form v2 by Colorlib](https://colorlib.com/wp/template/login-form-v2/)
